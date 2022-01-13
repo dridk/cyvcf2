@@ -34,3 +34,21 @@ jobs:
       run: |
         pytest --cov cyvcf2 --cov-report term-missing
 
+
+  windows:
+    runs-on: windows-latest  
+    architecture: ['x64']
+    steps:
+      - uses: actions/checkout@v2
+      - uses: msys2/setup-msys2@v2
+      with:
+          update: true
+          install: >-
+            base-devel
+            mingw-w64-x86_64-python
+            mingw-w64-x86_64-setuptools
+      - name: install 
+        run: |
+          cd htslib
+          autoheader && autoconf
+          ./configure --enable-s3 --disable-lzma --disable-bz2
